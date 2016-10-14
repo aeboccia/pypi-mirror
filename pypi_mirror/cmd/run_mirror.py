@@ -173,23 +173,21 @@ class Mirror(object):
     def build_mirror(self, mirror):
         print("Building mirror: %s" % mirror['name'])
         pip_format = (
-            "%(pip)s install -U %(extra_args)s --exists-action=w"
-            " --download %(download_cache)s"
+            "%(pip)s download -U %(extra_args)s --exists-action=w"
+            " --dest %(download_cache)s"
             " --build %(build_dir)s -f %(find_links)s"
-            " --no-use-wheel"
+            " --no-binary:all:"
             " -r %(requirements_file)s")
         venv_format = (
             "virtualenv --clear %(venv_dir)s")
         upgrade_format = (
-            "%(pip)s install -U --exists-action=w"
+            "%(pip)s download --exists-action=w"
             " -f %(find_links)s %(requirement)s")
         wheel_file_format = (
-            "%(pip)s wheel --download %(download_cache)s"
-            " --wheel-dir %(wheel_dir)s -f %(find_links)s"
+            "%(pip)s wheel --wheel-dir %(wheel_dir)s -f %(find_links)s"
             " -r %(requirements_file)s")
         wheel_format = (
-            "%(pip)s wheel --download %(download_cache)s"
-            " -f %(find_links)s --wheel-dir %(wheel_dir)s %(requirement)s")
+            "%(pip)s wheel -f %(find_links)s --wheel-dir %(wheel_dir)s %(requirement)s")
 
         workdir = tempfile.mkdtemp()
         reqs = os.path.join(workdir, "reqs")
