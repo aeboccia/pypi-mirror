@@ -173,10 +173,10 @@ class Mirror(object):
     def build_mirror(self, mirror):
         print("Building mirror: %s" % mirror['name'])
         pip_format = (
-            "%(pip)s download -U %(extra_args)s --exists-action=w"
+            "%(pip)s download %(extra_args)s --exists-action=w"
             " --dest %(download_cache)s"
             " --build %(build_dir)s -f %(find_links)s"
-            " --no-binary:all:"
+            " --no-binary :all:"
             " -r %(requirements_file)s")
         venv_format = (
             "virtualenv --clear %(venv_dir)s")
@@ -260,7 +260,7 @@ class Mirror(object):
                     "distribute"]
 
                 for requirement in build_tools:
-                    for extra_args in ("", "--no-use-wheel"):
+                    for extra_args in ("", "--no-binary :all:"):
                         self.run_command(
                             upgrade_format % dict(
                                 pip=pip, extra_args=extra_args,
@@ -313,7 +313,7 @@ class Mirror(object):
                 self.run_command(venv_format % dict(
                     extra_search_dir=pip_cache_dir, venv_dir=venv))
                 for requirement in ["pip", "wheel"]:
-                    for extra_args in ("", "--no-use-wheel"):
+                    for extra_args in ("", "--no-binary :all:"):
                         self.run_command(
                             upgrade_format % dict(
                                 pip=pip, extra_args=extra_args,
